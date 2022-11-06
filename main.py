@@ -114,30 +114,30 @@ while True:
       
       for plane in allcraft:
             plane.sprite.surf = pygame.image.load(plane.type["image"]).convert_alpha()
-            plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 19))
+            plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 30))
       
 
       for plane in selectedobjects:
             plane.sprite.surf = pygame.image.load(plane.type["highlighted_image"]).convert_alpha()
-            plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 19))
+            plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 30))
 
 
 
       for plane in allcraft:
             plane.time_tick(selectedobjects, screen, timeish)
 
-      #for plane in allcraft:
-
-
       for plane in allcraft:
             draw_dashed_line(screen, (42, 163, 2), plane.target, (plane.xpos, plane.ypos), 2)
 
 
-      for plane in allcraft:
-            screen.blit(rot_center(plane.sprite.surf, plane.angle), (plane.xpos- getcenter(plane.sprite.surf)[0], plane.ypos- getcenter(plane.sprite.surf)[1]))
 
-            #yes I do have a reason for spliting these into three sepperate opperations. It is to control the priority that items are created in to contol what layers they are on
-            #The priority of these items is as folows plane >dashed line >radar thing that goes around and highlits stuff
+      for plane in allcraft:
+            screen.blit(rot_center(plane.sprite.surf, plane.angle), (plane.xpos - getcenter(plane.sprite.surf)[0], plane.ypos - getcenter(plane.sprite.surf)[1]))
+
+            
+            
+            #YES I do have a reason for spliting these into two sepperate opperations. It is to control the priority that items are created in to contol what layers they are on
+            #The priority of these items is as folows >plane >dashed line >radar thing that goes around and highlits stuff
 
 
 
