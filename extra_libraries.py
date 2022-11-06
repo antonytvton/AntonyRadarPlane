@@ -2,6 +2,14 @@
 import math
 import numpy
 import pygame
+def getcenter(surf):
+    return(surf.get_width()/2, surf.get_height()/2)
+
+
+
+
+
+
 def draw_dashed_line(surf, color, start_pos, end_pos, dash_length=10):
     x1, y1 = start_pos
     x2, y2 = end_pos

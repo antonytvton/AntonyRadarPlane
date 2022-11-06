@@ -1,9 +1,10 @@
 #definecraft
 import pygame
+from extra_libraries import *
 import math
 from numpy import *
 global Foxtrot
-Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "largehardpoint": 0, "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png"}
+Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "largehardpoint": 0, "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "foxradcone.png"}
 
 def rot_center(image, angle, cent):
     """rotate a Surface, maintaining position."""
@@ -73,9 +74,15 @@ class Craft:
 
             if selectedobjects.count(self) == 1:
                   self.outline = pygame.image.load("outline.png").convert_alpha()
-                  #self.outline.set_colorkey((255, 255, 255), pygame.RLEACCEL)
-                  self.outline =  rot_center(self.outline, timeish, self.sprite.surf)
-                  screen.blit(self.outline, (self.xpos - 10, self.ypos - 8))
+                  self.outline = pygame.transform.rotate(self.sprite.surf, timeish)
+                  screen.blit(self.outline, (self.xpos - getcenter(self.outline)[0], self.ypos - getcenter(self.outline)[1]))
+
+
+            self.radtarget = pygame.image.load((self.type["radcone"])).convert_alpha
+            self.radtarget = pygame.transform.rotate(self.radtarget, self.angle)
+            #screen.blit 
+            
+                  
                   
 
                   
