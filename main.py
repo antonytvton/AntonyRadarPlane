@@ -6,15 +6,16 @@
 #teams
 #gui and polishing such as border around screen
 
-import time
 import sys
+import time
 import pygame
+
 pygame.init()
-from extra_libraries import *
+from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_UP, KEYDOWN,
+                           QUIT, RLEACCEL)
+
 from definecraft import *
-from pygame.locals import (
-      RLEACCEL, K_UP, K_DOWN, K_LEFT, K_RIGHT, K_ESCAPE
-      , KEYDOWN, QUIT)
+from extra_libraries import *
 
 pygame.init()
 clock = pygame.time.Clock()
@@ -39,13 +40,13 @@ foxtrot1 = Craft(Foxtrot, 1, "foxtrot1", 400, 800)
 foxtrot2 = Craft(Foxtrot, 2, "foxtrot1", 600, 800)
 
 
-allcraft = [foxtrot1, foxtrot2, foxtrot3]
+allcraft = [foxtrot1, foxtrot2, foxtrot0]
 selectedobjects = []
 for i in allcraft:
       allcraftsprite.append(i.sprite)
 global team1
 global team2
-global team3
+global team0
 global allteams
 
 team0 = [foxtrot0]
@@ -54,8 +55,8 @@ team2 = [foxtrot2]
 
 allteams = [team0, team1, team2]
 
-for plane in allcraftsprite:
-      plane.getrelations(allteams)
+for plane in allcraft:
+      plane.get_relations(allteams)
 
 
 def rot_center(image, angle):
@@ -144,7 +145,9 @@ while True:
 
 
       for plane in allcraft:
-            plane.time_tick(selectedobjects, screen, timeish)
+            plane.draw_radcone(screen)
+            plane.draw_highlights(selectedobjects, screen, timeish)
+            plane.time_turn()
 
       for plane in allcraft:
             draw_dashed_line(screen, (42, 163, 2), plane.target, (plane.xpos, plane.ypos), 2)
