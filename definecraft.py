@@ -4,7 +4,7 @@ from extra_libraries import *
 import math
 from numpy import *
 global Foxtrot
-Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "largehardpoint": 0, "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "transparencytest.png"}
+Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "missiles": [l], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "transparencytest.png"}
 
 def rot_center(image, angle, cent):
     """rotate a Surface, maintaining position."""
@@ -24,7 +24,7 @@ class Plane(pygame.sprite.Sprite):
 
         self.surf.set_colorkey((255, 255, 255), pygame.RLEACCEL)
 
-        self.surf = pygame.transform.smoothscale(self.surf, (30, 30))
+        self.surf = pygame.transform.smoothscale(self.surf, (40, 40))
         
 
 class Craft:
@@ -65,12 +65,15 @@ class Craft:
             self.target_angle = self.target_angle % 360
             self.differential = self.target_angle - self.angle
             self.differential = self.differential % 360
-            if self.differential % 360 < 180:
-                  self.angle += +self.turnrate/60
+            
+            if abs(self.differential % 360) > self.turnrate/60:
 
+                  if self.differential % 360 < 180:
+                        self.angle += +self.turnrate/60
+                  elif self.differential % 360 > 180:
+                        self.angle += -self.turnrate/60
 
-            if self.differential % 360 > 180:
-                  self.angle += -self.turnrate/60
+            self.sprite.surf = pygame.transform.rotate(self.sprite.surf, self.angle)
 
             if selectedobjects.count(self) == 1:
                   self.outline = pygame.image.load("outline.png").convert_alpha()
@@ -78,7 +81,7 @@ class Craft:
                   screen.blit(self.outline, (self.xpos - getcenter(self.outline)[0], self.ypos - getcenter(self.outline)[1]))
 
             self.radcone = pygame.image.load(self.type["radcone"]).convert_alpha()
-            self.radcone = self.outline = pygame.transform.rotate(pygame.transform.smoothscale(self.radcone, (90, 130)), self.angle)
+            self.radcone = self.outline = pygame.transform.rotate(pygame.transform.smoothscale(self.radcone, (500, 150)), self.angle)
             screen.blit(self.radcone, ((self.xpos - getcenter(self.radcone)[0]), (self.ypos - getcenter(self.radcone)[1])))
 
 
