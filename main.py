@@ -132,7 +132,7 @@ while True:
 
 
       for plane in allcraft:
-            screen.blit(rot_center(plane.sprite.surf, plane.angle), (plane.xpos - getcenter(plane.sprite.surf)[0], plane.ypos - getcenter(plane.sprite.surf)[1]))
+            screen.blit(plane.sprite.surf, (plane.xpos - getcenter(plane.sprite.surf)[0], plane.ypos - getcenter(plane.sprite.surf)[1]))
 
             
             
