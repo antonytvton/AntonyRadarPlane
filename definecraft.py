@@ -1,10 +1,25 @@
 #definecraft
-import pygame
-from extra_libraries import *
 import math
+
+import pygame
 from numpy import *
+
+from extra_libraries import *
+
 global Foxtrot
 Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "missiles": [1], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "transparencytest.png"}
+
+class Projectile:
+
+      def __init__(type, xpos, ypos, target, team, mother):
+            self.type = type
+            self.xpos = xpos
+            self.ypos = ypos
+            self.target = target
+            self.team = team
+            self.mother = mother
+            
+
 
 def rot_center(image, angle, cent):
     """rotate a Surface, maintaining position."""
@@ -49,11 +64,28 @@ class Craft:
             self.ypos = starty
             self.curspeed = self.maxspeed
             self.angle = -130
+            self.enemycraft = []
+            self.friends
+            self.enemyprojectiles = []
             #init craft sprite
             self.sprite = Plane(type)
 
 
+
+      def getrelations(self, allteams):
+            #looks at teams and finds friendlys and enemys
+            if self.team == 0:
+                  self.enemycraft = allteams[1] + allteams[2]
+                  self.friends = allteams[0]
+            elif self.team == 1:
+                  self.enemycraft = allteams[0] + allteams[2]
+                  self.friends = allteams[1]
+            elif self.team == 2:
+                  self.enemycraft = allteams[0] + allteams[1]
+                  self.friends = allteams[2]
+
       def time_tick(self, selectedobjects, screen, timeish):
+
             self.ypos = (sin(deg2rad(self.angle)))*(self.curspeed/200000)*70 + self.ypos
             self.xpos = -(cos(deg2rad(self.angle)))*(self.curspeed/200000)*70 + self.xpos
             if (self.xpos - self.target[0]) > 0:

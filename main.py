@@ -1,4 +1,11 @@
 #main
+
+#todolist
+#rolling
+#Make missiles and guns
+#teams
+#gui and polishing such as border around screen
+
 import time
 import sys
 import pygame
@@ -27,15 +34,28 @@ global ticktime
 #init craft
 global timeish
 timeish = 0
-foxtrot1 = Craft(Foxtrot, 1, "foxtrot1", 200, 800)
-foxtrot2 = Craft(Foxtrot, 1, "foxtrot1", 400, 800)
-foxtrot3 = Craft(Foxtrot, 1, "foxtrot1", 600, 800)
+foxtrot0 = Craft(Foxtrot, 0, "foxtrot1", 200, 800)
+foxtrot1 = Craft(Foxtrot, 1, "foxtrot1", 400, 800)
+foxtrot2 = Craft(Foxtrot, 2, "foxtrot1", 600, 800)
 
 
 allcraft = [foxtrot1, foxtrot2, foxtrot3]
 selectedobjects = []
 for i in allcraft:
       allcraftsprite.append(i.sprite)
+global team1
+global team2
+global team3
+global allteams
+
+team0 = [foxtrot0]
+team1 = [foxtrot1]
+team2 = [foxtrot2]
+
+allteams = [team0, team1, team2]
+
+for plane in allcraftsprite:
+      plane.getrelations(allteams)
 
 
 def rot_center(image, angle):
