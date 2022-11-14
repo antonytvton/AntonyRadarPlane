@@ -7,8 +7,9 @@ from numpy import *
 from extra_libraries import *
 
 global Foxtrot
-
-Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [1], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
+avalanch = {"speed": 6000}
+Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png",
+ "missiles": [avalanch, avalanch], "guns": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
 
 class Projectile:
 
@@ -19,6 +20,7 @@ class Projectile:
             self.target = target
             self.team = team
             self.mother = mother
+            speed = type["speed"]
             
 
 
@@ -93,7 +95,7 @@ class Craft:
 
       def time_turn(self):
             radangle = (deg2rad(self.angle))
-            pixlespeed = (self.curspeed/400000)*70
+            pixlespeed = (self.curspeed)/0.00020
 
             self.ypos = (sin(radangle))* pixlespeed + self.ypos
             self.xpos = -(cos(radangle))* pixlespeed + self.xpos
