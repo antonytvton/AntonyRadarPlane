@@ -3,7 +3,7 @@
 #todolist
 #rolling
 #Make missiles and guns
-#teams
+#stop lag
 #gui and polishing such as border around screen
 
 import sys
@@ -30,6 +30,7 @@ leftclick = False
 screen = pygame.display.set_mode([screen_w, screen_h])
 allcraftsprite = []
 bg = pygame.image.load("background.png")
+pygame.mixer.music.load("aircombattheme.mp3")
 
 global ticktime
 #init craft
@@ -68,6 +69,7 @@ def rot_center(image, angle):
     return rot_sprite
 
 # Run until the user asks to quit
+pygame.mixer.music.play(-1)
 
 while True:
 
@@ -134,12 +136,12 @@ while True:
       #you can edit the screen from here on out
       
       for plane in allcraft:
-            plane.sprite.surf = pygame.image.load(plane.type["image"]).convert_alpha()
+            plane.sprite.surf = plane.plain.copy()
             plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 30))
       
 
       for plane in selectedobjects:
-            plane.sprite.surf = pygame.image.load(plane.type["highlighted_image"]).convert_alpha()
+            plane.sprite.surf = plane.highlighted.copy()
             plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 30))
 
 
