@@ -8,7 +8,9 @@ from extra_libraries import *
 
 global Foxtrot
 
-Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [1], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
+Avalanch = {"speed": 6000 "firingangle"}
+
+Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [Avalanch], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
 
 class Projectile:
 
@@ -19,6 +21,8 @@ class Projectile:
             self.target = target
             self.team = team
             self.mother = mother
+            self.speed = Avalanch["speed"]
+            self.firingangle
             
 
 
@@ -135,7 +139,31 @@ class Craft:
             self.radcone = pygame.transform.rotate(self.radcone, self.angle)
             screen.blit(self.radcone, ((self.xpos - getcenter(self.radcone)[0]), (self.ypos - getcenter(self.radcone)[1])))
 
-            #screen.blit 
+#THIS IS A WIP
+
+
+
+
+      def fire_wepons(self)
+            for plane in self.enemycraft:
+                  firetargetx = plane.xpos
+                  firetargety = plane.ypos
+                  if sqrt((plane.xpos)^2+(plane.ypos)^2) > MISSILE RANGE PLACEHOLDER:
+                        pass #replace pass with check if within firing angle
+
+                        if (self.xpos - self.target[0]) > 0:
+                                          self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))
+
+                                    elif (self.xpos - self.target[0]) < 0:
+                                          self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))+180
+                                    else:
+                                          self.target_angle = 270
+
+                                    self.target_angle = self.target_angle % 360
+                                    self.differential = self.target_angle - self.angle
+                                    self.differential = self.differential % 360
+                                    
+                                    if self.differential < self.MissileAngle
             
                   
                   

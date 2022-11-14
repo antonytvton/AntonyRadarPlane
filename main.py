@@ -139,7 +139,7 @@ while True:
 
       screen.blit(bg, (0, 0))  
       #you can edit the screen from here on out
-      
+
       for plane in allcraft:
             plane.sprite.surf = plane.plain.copy()
             plane.sprite.surf = pygame.transform.smoothscale(plane.sprite.surf, (30, 30))
