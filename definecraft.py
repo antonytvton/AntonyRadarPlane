@@ -7,7 +7,8 @@ from numpy import *
 from extra_libraries import *
 
 global Foxtrot
-Foxtrot = {"maxspeed": 2750, "turnrate": 30, "acceleration": 600, "image": "foxtrot1.png", "missiles": [1], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
+
+Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [1], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
 
 class Projectile:
 
@@ -67,10 +68,14 @@ class Craft:
             self.enemyprojectiles = []
             self.hp = 1000
             self.radturn = 0
+            self.turnpertick = self.turnrate/60
             #init craft sprite
             self.sprite = Plane(type)
-            self.radcone = pygame.image.load(self.type["radcone"]).convert_alpha()
-            self.radcone = self.outline = pygame.transform.rotate(self.radcone, self.angle+90)
+            self.radconecache = pygame.image.load(self.type["radcone"]).convert_alpha()
+            self.highlighted = pygame.image.load(self.type["highlighted_image"]).convert_alpha()
+            self.plain = pygame.image.load(self.type["image"]).convert_alpha()
+            self.radconecache = pygame.transform.rotate(self.radconecache, self.angle+220)
+            
 
 
 
@@ -87,26 +92,31 @@ class Craft:
                   self.friends = allteams[2]
 
       def time_turn(self):
-            self.ypos = (sin(deg2rad(self.angle)))*(self.curspeed/200000)*70 + self.ypos
-            self.xpos = -(cos(deg2rad(self.angle)))*(self.curspeed/200000)*70 + self.xpos
+            radangle = (deg2rad(self.angle))
+            pixlespeed = (self.curspeed/400000)*70
+
+            self.ypos = (sin(radangle))* pixlespeed + self.ypos
+            self.xpos = -(cos(radangle))* pixlespeed + self.xpos
             if (self.xpos - self.target[0]) > 0:
                   self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))
 
-            if (self.xpos - self.target[0]) < 0:
+            elif (self.xpos - self.target[0]) < 0:
                   self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))+180
+            else:
+                  self.target_angle = 270
 
             self.target_angle = self.target_angle % 360
             self.differential = self.target_angle - self.angle
             self.differential = self.differential % 360
             
-            if abs(self.differential % 360) > self.turnrate/60:
+            if self.differential > self.turnpertick:
 
-                  if self.differential % 360 < 180:
-                        self.angle += self.turnrate/60
-                        self.radturn = self.turnrate/60
-                  elif self.differential % 360 > 180:
-                        self.angle += -self.turnrate/60
-                        self.radturn = -self.turnrate/60
+                  if self.differential< 180:
+                        self.angle += self.turnpertick
+                        self.radturn = self.turnpertick
+                  elif self.differential> 180:
+                        self.angle += -self.turnpertick
+                        self.radturn = -self.turnpertick
 
             self.sprite.surf = pygame.transform.rotate(self.sprite.surf, self.angle)
 
@@ -121,7 +131,8 @@ class Craft:
 
 
       def draw_radcone(self, screen):
-            self.radcone = self.outline = pygame.transform.rotate(self.radcone, self.radturn)
+            self.radcone = self.radconecache.copy()
+            self.radcone = pygame.transform.rotate(self.radcone, self.angle)
             screen.blit(self.radcone, ((self.xpos - getcenter(self.radcone)[0]), (self.ypos - getcenter(self.radcone)[1])))
 
             #screen.blit 
