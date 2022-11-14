@@ -17,6 +17,7 @@ from pygame.locals import (K_DOWN, K_ESCAPE, K_LEFT, K_RIGHT, K_UP, KEYDOWN,
 from definecraft import *
 from extra_libraries import *
 
+pygame.mixer.init()
 pygame.init()
 clock = pygame.time.Clock()
 screen_w = 1900
@@ -30,8 +31,8 @@ leftclick = False
 screen = pygame.display.set_mode([screen_w, screen_h])
 allcraftsprite = []
 bg = pygame.image.load("background.png")
-pygame.mixer.music.load("aircombattheme.mp3")
-
+bgmusic1 = pygame.mixer.Sound("aircombattheme1.mp3")
+bgmusic2 = pygame.mixer.Sound("aircombattheme2.mp3")
 global ticktime
 #init craft
 global timeish
@@ -69,7 +70,11 @@ def rot_center(image, angle):
     return rot_sprite
 
 # Run until the user asks to quit
-pygame.mixer.music.play(-1)
+chan1 = pygame.mixer.find_channel()
+chan1.queue(bgmusic1)
+for i in range(3):
+      chan1.queue(bgmusic2)
+
 
 while True:
 
