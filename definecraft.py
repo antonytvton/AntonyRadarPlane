@@ -10,11 +10,11 @@ global Foxtrot
 
 Avalanch = {"speed": 6000 "firingangle"}
 
-Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [Avalanch], "smallhardpoint": 0, "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
+Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [Avalanch], "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
 
 class Projectile:
 
-      def __init__(self, type, xpos, ypos, target, team, mother):
+      def __init__(self, type, team, mother):
             self.type = type
             self.xpos = xpos
             self.ypos = ypos
@@ -79,6 +79,12 @@ class Craft:
             self.highlighted = pygame.image.load(self.type["highlighted_image"]).convert_alpha()
             self.plain = pygame.image.load(self.type["image"]).convert_alpha()
             self.radconecache = pygame.transform.rotate(self.radconecache, self.angle+220)
+            self.missiles = []
+            for misstype in [self.type["missiles"]]:
+                  missile = Projectile(misstype, self.team, self)
+                  self.missiles.append(missile)
+
+
             
 
 
@@ -140,30 +146,34 @@ class Craft:
             screen.blit(self.radcone, ((self.xpos - getcenter(self.radcone)[0]), (self.ypos - getcenter(self.radcone)[1])))
 
 #THIS IS A WIP
+      
 
 
 
 
-      def fire_wepons(self)
+      def fire_weapons(self)
+            missiledifangle = 0
             for plane in self.enemycraft:
-                  firetargetx = plane.xpos
-                  firetargety = plane.ypos
-                  if sqrt((plane.xpos)^2+(plane.ypos)^2) > MISSILE RANGE PLACEHOLDER:
-                        pass #replace pass with check if within firing angle
+                  entargetx = plane.xpos
+                  entargety = plane.ypos
+                  if sqrt((plane.xpos - entargetx)^2+(plane.ypos - entargety)^2) < MISSILE RANGE PLACEHOLDER:
+                         #replace pass with check if within firing angle
+
+                        mda = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))
 
                         if (self.xpos - self.target[0]) > 0:
-                                          self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))
+                              missiledifangle = mda
 
-                                    elif (self.xpos - self.target[0]) < 0:
-                                          self.target_angle = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))+180
-                                    else:
-                                          self.target_angle = 270
+                        elif (self.xpos - self.target[0]) < 0:
+                              missiledifangle = mda +180
+                        else:
+                              missiledifangle = 270
 
-                                    self.target_angle = self.target_angle % 360
-                                    self.differential = self.target_angle - self.angle
-                                    self.differential = self.differential % 360
-                                    
-                                    if self.differential < self.MissileAngle
+                        self.target_angle = self.target_angle % 360
+                        self.differential = self.target_angle - self.angle
+                        self.differential = self.differential % 360
+                        
+                        if self.differential < missilemaxaoe
             
                   
                   
