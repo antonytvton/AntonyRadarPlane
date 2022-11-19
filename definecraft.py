@@ -8,21 +8,31 @@ from extra_libraries import *
 
 global Foxtrot
 
-Avalanch = {"speed": 6000 "firingangle"}
-
-Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [Avalanch], "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
+Avalanch = {"speed": 6000, "firingangle": 30, "minrange": 250, "immage": "missile.png"}
+Foxtrot = {"maxspeed": 2750, "turnrate": 20, "acceleration": 600, "image": "foxtrot1.png", "missiles": [Avalanch, Avalanch], "gunhardpoint": 0, "highlighted_image": "foxtrothighlighted1.png", "highlightoverlay" : "outline.png", "radcone" : "radpic2.png"}
 
 class Projectile:
 
-      def __init__(self, type, team, mother):
+      def __init__(self, team, mother, type=Avalanch):
             self.type = type
-            self.xpos = xpos
-            self.ypos = ypos
-            self.target = target
+            self.xpos = 0
+            self.ypos = 0
             self.team = team
             self.mother = mother
-            self.speed = Avalanch["speed"]
-            self.firingangle
+            self.speed = type["speed"]
+            self.firingangle = type["firingangle"]
+            self.range = type["minrange"]
+            self.fireable = True
+
+
+      def fireon(self, xpos, ypos, angle):
+            self.sprite = pygame.image.load(self.type["immage"]).convert_alpha()
+            self.xpos = xpos
+            self.ypos = ypos
+            self.angle = pygame.transform.rotate(self.sprite, angle)
+            screen.blit(self.sprite, (self.xpos, self.ypos))
+
+
             
 
 
@@ -51,7 +61,6 @@ class Craft:
       def __init__(self, type, team, name, startx = 0, starty = 0):
             #defining each craft type
 
-
             #inital data about craft
             self.maxspeed = type["maxspeed"]
             self.type = type
@@ -79,10 +88,10 @@ class Craft:
             self.highlighted = pygame.image.load(self.type["highlighted_image"]).convert_alpha()
             self.plain = pygame.image.load(self.type["image"]).convert_alpha()
             self.radconecache = pygame.transform.rotate(self.radconecache, self.angle+220)
-            self.missiles = []
+            self.allstoredmissiles = []
             for misstype in [self.type["missiles"]]:
-                  missile = Projectile(misstype, self.team, self)
-                  self.missiles.append(missile)
+                  missile = Projectile(self.team, self, misstype[0])
+                  self.allstoredmissiles.append(missile)
 
 
             
@@ -141,8 +150,7 @@ class Craft:
 
 
       def draw_radcone(self, screen):
-            self.radcone = self.radconecache.copy()
-            self.radcone = pygame.transform.rotate(self.radcone, self.angle)
+            self.radcone = pygame.transform.rotate(self.radconecache, self.angle)
             screen.blit(self.radcone, ((self.xpos - getcenter(self.radcone)[0]), (self.ypos - getcenter(self.radcone)[1])))
 
 #THIS IS A WIP
@@ -151,31 +159,28 @@ class Craft:
 
 
 
-      def fire_weapons(self)
+      def inrange(self):
             missiledifangle = 0
             for plane in self.enemycraft:
                   entargetx = plane.xpos
                   entargety = plane.ypos
-                  if sqrt((plane.xpos - entargetx)^2+(plane.ypos - entargety)^2) < MISSILE RANGE PLACEHOLDER:
-                         #replace pass with check if within firing angle
-
-                        mda = -(rad2deg(real(math.atan((self.ypos - self.target[1])/(self.xpos - self.target[0])))))
-
-                        if (self.xpos - self.target[0]) > 0:
-                              missiledifangle = mda
-
-                        elif (self.xpos - self.target[0]) < 0:
-                              missiledifangle = mda +180
-                        else:
-                              missiledifangle = 270
-
-                        self.target_angle = self.target_angle % 360
-                        self.differential = self.target_angle - self.angle
-                        self.differential = self.differential % 360
-                        
-                        if self.differential < missilemaxaoe
-            
                   
-                  
+                  for missile in self.allstoredmissiles:
+                        if sqrt((self.xpos - entargetx)**2+(self.ypos - entargety)**2) < missile.range:
+                              #replace pass with check if within firing angle
 
-                  
+                              mda = -(rad2deg(real(math.atan((self.ypos - entargety)/(self.xpos - entargetx)))))
+
+                              if (self.xpos - entargetx) > 0:
+                                    missiledifangle = mda
+
+                              elif (self.xpos - entargety) < 0:
+                                    missiledifangle = mda +180
+                              else:
+                                    missiledifangle = 270
+
+                              missiledifangle = missiledifangle % 360
+                              self.differential = missiledifangle - self.angle
+                              self.differential = self.differential % 360
+                              if self.differential < missile.firingangle and missile.fireable == True:
+                                    missile.fireon(self, self.xpos, self.ypos, missiledifangle)

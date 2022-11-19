@@ -3,7 +3,6 @@
 #todolist
 #rolling
 #Make missiles and guns
-#stop lag
 #gui and polishing such as border around screen
 
 import sys
@@ -123,7 +122,7 @@ while True:
             if selectedobjects == [] or mods & pygame.KMOD_SHIFT:
 
                   for plane in allcraft:
-                        if (sqrt(square(plane.xpos - (pygame.mouse.get_pos()[0])) + square(plane.ypos - (pygame.mouse.get_pos()[1]))) < 35) and selectedobjects.count(plane) == 0:
+                        if (sqrt(square(plane.xpos - (pygame.mouse.get_pos()[0])) + square(plane.ypos - (pygame.mouse.get_pos()[1]))) < 30) and selectedobjects.count(plane) == 0:
 
                               selectedobjects.append(plane)
             else:
@@ -139,6 +138,13 @@ while True:
 
       screen.blit(bg, (0, 0))  
       #you can edit the screen from here on out
+
+      for plane in allcraft:
+            plane.inrange()
+
+
+
+            
 
       for plane in allcraft:
             plane.sprite.surf = plane.plain.copy()
@@ -163,6 +169,7 @@ while True:
 
       for plane in allcraft:
             screen.blit(plane.sprite.surf, (plane.xpos - getcenter(plane.sprite.surf)[0], plane.ypos - getcenter(plane.sprite.surf)[1]))
+
 
             
             
