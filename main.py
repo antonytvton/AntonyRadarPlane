@@ -140,7 +140,8 @@ while True:
       #you can edit the screen from here on out
 
       for plane in allcraft:
-            plane.inrange()
+            plane.inrange(screen, selectedobjects)
+            plane.missilesglide(screen)
 
 
 
